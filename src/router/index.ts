@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PcPageRouter from './pcPage/pcPageRouter'
 import EchartsRouter from './echarts/echartsRoter'
+import PhonePageRouter from './phonePage/phonePage'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...PcPageRouter,
     ...EchartsRouter,
+    ...PhonePageRouter,
     {
       path: '/',
       name: 'home',
