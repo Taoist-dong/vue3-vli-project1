@@ -11,7 +11,7 @@ import { VantResolver } from '@vant/auto-import-resolver';
 export default defineConfig({
   plugins: [
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver(),VantResolver()],
     }),
     Components({
       resolvers: [ElementPlusResolver(),VantResolver()],

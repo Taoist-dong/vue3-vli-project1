@@ -6,12 +6,11 @@
         v-for="(image, index) in images"
         :key="index"
         :src="image"
-        v-show="index == currentSlide"
+        :style="{left: index * 100 + '%', 'transform': dynamicstyle}"
         alt="暂无图片"
       />
     </div>
-    <div @click="nextSlide" class="carousel-prev-icon-right">
-    </div>
+    <div @click="nextSlide" class="carousel-prev-icon-right"></div>
   </div>
 </template>
 <script>
@@ -20,40 +19,43 @@ export default {
     return {
       images: [
         '/src/assets/img/sakuraTree01.jpeg',
-        '/src//assets/img/starrySky.jpg',
-        '/src//assets/img/starrySky02.jpg'
+        '/src/assets/img/starrySky.jpg',
+        '/src/assets/img/starrySky02.jpg'
         // ... 更多图片
       ],
-      currentSlide: 0
+      dynamicstyle: "", //动态样式
+      currentSlide: 0, //播放序号
+      interval: Object,
     }
   },
-  created() {},
   mounted() {
+    // 自动播放动画
     this.startSlideshow()
   },
   methods: {
     nextSlide() {
       // 每次指针加一
       this.currentSlide = (this.currentSlide + 1) % this.images.length
-      console.log(this.currentSlide)
+      this.setStyle();
     },
     prevSlide() {
       // 每次减一，为负数时循环
-      this.currentSlide = (this.currentSlide - 1 + this.images.length) % this.images.length
-      console.log(this.currentSlide)
+      this.currentSlide = (this.currentSlide - 1 + this.images.length) % this.images.length;
+      this.setStyle();
     },
+    // 图片动画
+    setStyle() {
+      this.dynamicstyle = `translatex(-${this.currentSlide*100}%)`
+    },
+    // 定时器
     startSlideshow() {
       this.interval = setInterval(() => {
-        this.navigateToNext(this.currentSlide)
+        this.currentSlide = (this.currentSlide + 1) % this.images.length;
+        this.setStyle();
       }, 3000)
     },
     stopSlideshow() {
       clearInterval(this.interval)
-    },
-    navigateToNext() {
-      const currentIndex = this.images.indexOf(this.images[this.currentSlide])
-      const nextIndex = (currentIndex + 1) % this.images.length
-      // this.images[0] = this.images[nextIndex]
     }
   }
 }
@@ -61,18 +63,23 @@ export default {
 <style scoped>
 .carousel {
   position: relative;
-  width: 100%;
-  overflow: hidden;
 }
 .carousel-slides {
-  display: flex;
-  width: 100%;
-  height: 100%;
+  position: relative;
+  width: 320px;
+  height: 173px;
+  overflow: hidden;
 }
 .carousel-slides img {
-  width: 100%;
+  display: inline-block;
+  position: absolute;
+  width: inherit;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
   height: 100%;
-  transition: .5s transform ease-in-out;
+  transition: 0.5s transform ease-in-out;
 }
 .carousel-controls {
   position: absolute;
@@ -89,10 +96,11 @@ export default {
   height: 50px;
   width: 40px;
   border: none;
-  background-image: url(../../../assets/img/arrow-left.png);
+  background-image: url(../../../assets/img/arrow-l.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  z-index: 999;
 }
 .carousel-prev-icon-right {
   position: absolute;
@@ -101,7 +109,7 @@ export default {
   height: 50px;
   width: 40px;
   border: none;
-  background-image: url('../../../assets/img/arrow-right.png/');
+  background-image: url('../../../assets/img/arrow-r.png/');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
